@@ -24,7 +24,7 @@ public class NoteRunner
 	
 	protected int _tickOffs = 0;
 	protected int _noteOffs = 0;
-	protected int _notes[] = {
+	protected int[] _notes = {
 			523, 659, 784,
 			523, 659, 784,
 			523, 659, 784,
@@ -35,12 +35,17 @@ public class NoteRunner
 			784, 988, 1175,
 			784, 988, 1175,
 		};
-	protected int _duties[] = {50, 50, 50};
+	protected int[] _duties = {50, 50, 50};
 	
 	
 	public byte[] getSamples_8(int count)
 	{
-		byte buf[] = new byte[count];
+		byte[] buf = new byte[count];
+		return getSamplesR_8(buf, 0, count);
+	}
+	
+	public byte[] getSamplesR_8(byte[] buf, int writeOffs, int count)
+	{
 		int copied = 0;
 		
 		do
@@ -50,9 +55,12 @@ public class NoteRunner
 			{
 				numGen = count - copied;
 			}
-			byte sqbuf[] = sqwave.getSamples_8(numGen);
 			
-			System.arraycopy(sqbuf, 0, buf, copied, sqbuf.length);
+			//byte[] sqbuf = sqwave.getSamples_8(numGen);
+			//System.arraycopy(sqbuf, 0, buf, writeOffs + copied, sqbuf.length);
+			
+			sqwave.getSamplesR_8(buf, writeOffs + copied, numGen);
+			
 			copied += numGen;
 			_tickOffs += numGen;
 			

@@ -57,8 +57,12 @@ public class SquareWaveGen
 	
 	public byte[] getSamples_8(int count)
 	{
-		byte buf[] = new byte[count];
-		
+		byte[] buf = new byte[count];
+		return getSamplesR_8(buf, 0, count);
+	}
+	
+	public byte[] getSamplesR_8(byte[] buf, int writeOffs, int count)
+	{
 		int offs = 0;
 		
 		// periods of high/low duty cycles
@@ -88,7 +92,7 @@ public class SquareWaveGen
 			}
 			for(int i = 0; i < num_gen; i++, offs++)
 			{
-				buf[offs] = genbyte;
+				buf[writeOffs + offs] = genbyte;
 			}
 			_sampleOffset = (_sampleOffset + num_gen) % _samplePeriod;
 		}
