@@ -56,9 +56,6 @@ public class NoteRunner
 				numGen = count - copied;
 			}
 			
-			//byte[] sqbuf = sqwave.getSamples_8(numGen);
-			//System.arraycopy(sqbuf, 0, buf, writeOffs + copied, sqbuf.length);
-			
 			sqwave.getSamplesR_8(buf, writeOffs + copied, numGen);
 			
 			copied += numGen;

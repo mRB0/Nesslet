@@ -9,16 +9,6 @@ public class Player
 	private int minBufferSize = 4096;
 	private int sampleRate = 44100;
 
-    private int minSize = AudioTrack.getMinBufferSize(sampleRate,
-            AudioFormat.CHANNEL_CONFIGURATION_MONO,
-            AudioFormat.ENCODING_PCM_8BIT);
-    private AudioTrack audio = new AudioTrack(
-            AudioManager.STREAM_MUSIC, sampleRate,
-            AudioFormat.CHANNEL_CONFIGURATION_MONO,
-            AudioFormat.ENCODING_PCM_8BIT,
-            minSize < minBufferSize ? minBufferSize : minSize,
-            AudioTrack.MODE_STREAM);
-
     protected boolean stopPlaying = false;
 
     protected NoteRunner notes;
@@ -28,7 +18,17 @@ public class Player
     {
         public void playAudio()
         {
-            audio.play();
+            int minSize = AudioTrack.getMinBufferSize(sampleRate,
+                    AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                    AudioFormat.ENCODING_PCM_8BIT);
+            AudioTrack audio = new AudioTrack(
+                    AudioManager.STREAM_MUSIC, sampleRate,
+                    AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                    AudioFormat.ENCODING_PCM_8BIT,
+                    minSize < minBufferSize ? minBufferSize : minSize,
+                    AudioTrack.MODE_STREAM);
+
+        	audio.play();
             
             int bufsize = minSize < minBufferSize ? minBufferSize : minSize;
             
@@ -58,7 +58,7 @@ public class Player
         }
         catch (InterruptedException e)
         {
-            System.err.print("Join interrupted\n");
+            System.err.println("Join interrupted");
         }
         playThread = null;
     }
