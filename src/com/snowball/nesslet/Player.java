@@ -32,9 +32,11 @@ public class Player
             
             int bufsize = minSize < minBufferSize ? minBufferSize : minSize;
             
+            byte[] buffer = new byte[bufsize];
+            
             while(!stopPlaying)
             {
-            	audio.write(notes.getSamples_8(bufsize), 0, bufsize);
+            	audio.write(notes.getSamplesR_8(buffer, 0, bufsize), 0, bufsize);
             }
             
             audio.stop();
