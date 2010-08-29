@@ -1,7 +1,5 @@
 package com.snowball.nesslet;
 
-import java.util.Iterator;
-
 public class SquareWaveGen
 {
 	protected boolean _on;
@@ -61,42 +59,31 @@ public class SquareWaveGen
 		return getSamplesR_8(buf, 0, count);
 	}
 	
-    Generator<Byte> squareWaveGenerator = new Generator<Byte>() {
-        @Override
-        public void run() {
-    		int i;
-        	for(;;)
-        	{
-//        		for(i = 0; i < _samplePeriod * _dutyCycle / 100; i++)
-//        		{
-//        			yield((byte)(127 - _amplitude));
-//        		}
-//        		for(i = 0; i < _samplePeriod - (_samplePeriod * _dutyCycle / 100); i++)
-//        		{
-//        			yield((byte)(-128 + _amplitude));
-//        		}
-        		
-        		for(i=0; i<50; i++)
-        		{
-        			yield((byte)0);
-        		}
-        		for(i=0; i<50; i++)
-        		{
-        			yield((byte)-1);
-        		}
-            }
-        }
-    };
+    protected int _sampleIdx = 0;
     
-    Iterator<Byte> squareWaveSamples = squareWaveGenerator.iterator();
-
+	protected byte nextSample()
+	{
+		int middle = _samplePeriod * _dutyCycle / 100;
+		
+		_sampleIdx = (_sampleIdx + 1) % _samplePeriod;
+		
+		if (_sampleIdx < middle)
+		{
+			return (byte)(127 - _amplitude);
+		}
+		else
+		{
+			return (byte)(-128 + _amplitude);
+		}	
+    }
+    
 	public byte[] getSamplesR_8(byte[] buf, int writeOffs, int count)
 	{
 		int offs;
 		
 		for(offs = 0; offs < count; offs++)
 		{
-			buf[writeOffs + offs] = squareWaveSamples.next();
+			buf[writeOffs + offs] = nextSample();
 		}
 		
 		return buf;
