@@ -52,16 +52,9 @@ public class SquareWaveGen
 	}
 	
 	protected int _samplePeriod; // Period of sample (dependent on _sampleRate)
-	
-	public byte[] getSamples_8(int count)
-	{
-		byte[] buf = new byte[count];
-		return getSamplesR_8(buf, 0, count);
-	}
-	
     protected int _sampleIdx = 0;
     
-	protected byte nextSample()
+	public byte nextSample()
 	{
 		int middle = _samplePeriod * _dutyCycle / 100;
 		
@@ -77,15 +70,4 @@ public class SquareWaveGen
 		}	
     }
     
-	public byte[] getSamplesR_8(byte[] buf, int writeOffs, int count)
-	{
-		int offs;
-		
-		for(offs = 0; offs < count; offs++)
-		{
-			buf[writeOffs + offs] = nextSample();
-		}
-		
-		return buf;
-	}
 }
