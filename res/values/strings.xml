@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, Nesslet!</string>
     <string name="app_name">Nesslet</string>
+<string name="log_name">Nesslet</string>
 </resources>
