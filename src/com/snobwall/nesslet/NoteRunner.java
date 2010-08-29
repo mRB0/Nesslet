@@ -44,28 +44,65 @@ public class NoteRunner
 		return (int)(440.0 * Math.pow(Math.pow(2.0, (1.0/12.0)), (double)(note - 49)));
 	}
 
-	protected Note _notes[] =
+	protected int _songIdx = 0;
+	protected int _playingIdx = _songIdx;
+	
+	public int get_songIdx() {
+		return _songIdx;
+	}
+
+	public void set_songIdx(int songIdx) {
+		if (songIdx >= _notes.length)
+		{
+			_songIdx = 0;
+		}
+		else
+		{
+			_songIdx = songIdx;
+		}
+	}
+
+	protected Note _notes[][] =
 	{
-		new Note((byte)47, (byte)64, (byte)50, (byte)0),
-		new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
-		new Note((byte)40, (byte)-1, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)16, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)32, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)80, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
-		new Note((byte)42, (byte)96, (byte)-1, (byte)-1),
-		new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
-		new Note((byte)44, (byte)96, (byte)31, (byte)-1),
-		new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
-		new Note((byte)45, (byte)96, (byte)10, (byte)-1),
-		new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+			{
+				new Note((byte)47, (byte)64, (byte)50, (byte)0),
+				new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
+				new Note((byte)40, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)16, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)32, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)80, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+				new Note((byte)42, (byte)96, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+				new Note((byte)44, (byte)96, (byte)31, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+				new Note((byte)45, (byte)96, (byte)10, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+			},
+			{
+				new Note((byte)49, (byte)64, (byte)50, (byte)0),
+				new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
+				new Note((byte)42, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)16, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)32, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)80, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+				new Note((byte)40, (byte)96, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+				new Note((byte)39, (byte)96, (byte)31, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+				new Note((byte)35, (byte)96, (byte)10, (byte)-1),
+				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+			},
 	};
 	
 	// State!
-	protected Note _state_note;
 	protected int _state_frameOffs = 0; // which frame, inside the tick, are we on?
 	protected int _state_tickOffs = 0; // which tick are we on?
 	protected int _state_noteOffs = 0; // which note are we playing?
@@ -77,7 +114,13 @@ public class NoteRunner
 		if (_state_tickOffs == 0 && 
 				_state_frameOffs == 0) 
 		{
-			Note newNote = _notes[_state_noteOffs];
+			if (_state_noteOffs == 0)
+			{
+				// song ended at last sample get
+				_playingIdx = _songIdx;
+			}
+					
+			Note newNote = _notes[_playingIdx][_state_noteOffs];
 			
 			// new note; change things as appropriate
 			if (newNote.noteNum >= 0)
@@ -103,7 +146,7 @@ public class NoteRunner
 			_state_tickOffs = (_state_tickOffs + 1) % _numTicks;
 			if (_state_tickOffs == 0)
 			{
-				_state_noteOffs = (_state_noteOffs + 1) % _notes.length;
+				_state_noteOffs = (_state_noteOffs + 1) % _notes[_playingIdx].length;
 				// if _state_noteOffs is 0, then we've looped the song
 			}
 		}
