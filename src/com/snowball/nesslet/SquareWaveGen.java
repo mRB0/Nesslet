@@ -1,5 +1,7 @@
 package com.snowball.nesslet;
 
+import java.util.Iterator;
+
 public class SquareWaveGen
 {
 	protected boolean _on;
@@ -26,7 +28,6 @@ public class SquareWaveGen
 		_frequency = frequency;
 		
 		_samplePeriod = _sampleRate / _frequency;
-		_sampleOffset = 0;
 	}
 
 	public byte get_amplitude() {
@@ -52,7 +53,6 @@ public class SquareWaveGen
 		
 	}
 	
-	protected int _sampleOffset; // Offset in sample
 	protected int _samplePeriod; // Period of sample (dependent on _sampleRate)
 	
 	public byte[] getSamples_8(int count)
@@ -61,42 +61,43 @@ public class SquareWaveGen
 		return getSamplesR_8(buf, 0, count);
 	}
 	
+    Generator<Byte> squareWaveGenerator = new Generator<Byte>() {
+        @Override
+        public void run() {
+    		int i;
+        	for(;;)
+        	{
+//        		for(i = 0; i < _samplePeriod * _dutyCycle / 100; i++)
+//        		{
+//        			yield((byte)(127 - _amplitude));
+//        		}
+//        		for(i = 0; i < _samplePeriod - (_samplePeriod * _dutyCycle / 100); i++)
+//        		{
+//        			yield((byte)(-128 + _amplitude));
+//        		}
+        		
+        		for(i=0; i<50; i++)
+        		{
+        			yield((byte)0);
+        		}
+        		for(i=0; i<50; i++)
+        		{
+        			yield((byte)-1);
+        		}
+            }
+        }
+    };
+    
+    Iterator<Byte> squareWaveSamples = squareWaveGenerator.iterator();
+
 	public byte[] getSamplesR_8(byte[] buf, int writeOffs, int count)
 	{
-		int offs = 0;
+		int offs;
 		
-		// periods of high/low duty cycles
-		int high = _samplePeriod * _dutyCycle / 100;
-		int low = _samplePeriod - high;
-		
-		byte genbyte;
-		int num_gen;
-		
-		do
+		for(offs = 0; offs < count; offs++)
 		{
-			if (_sampleOffset >= high)
-		    {
-		    	// generate low samples
-		    	genbyte = (byte)(127 - _amplitude);
-		    	num_gen = low - (_sampleOffset - high);
-		    }
-		    else
-		    {
-		    	// generate high samples
-		    	genbyte = (byte)(-128 + _amplitude);
-		    	num_gen = high - _sampleOffset;
-		    }
-			if (num_gen > count - offs)
-			{
-				num_gen = count - offs;
-			}
-			for(int i = 0; i < num_gen; i++, offs++)
-			{
-				buf[writeOffs + offs] = genbyte;
-			}
-			_sampleOffset = (_sampleOffset + num_gen) % _samplePeriod;
+			buf[writeOffs + offs] = squareWaveSamples.next();
 		}
-		while(offs < count);
 		
 		return buf;
 	}
