@@ -16,7 +16,7 @@ public class Player
     
     public class AudioPlayer implements Runnable
     {
-        public void playAudio()
+    	public void playAudio()
         {
             int minSize = AudioTrack.getMinBufferSize(sampleRate,
                     AudioFormat.CHANNEL_CONFIGURATION_MONO,
@@ -36,7 +36,12 @@ public class Player
             
             while(!stopPlaying)
             {
-            	audio.write(notes.getSamplesR_8(buffer, 0, bufsize), 0, bufsize);
+        		for(int offs = 0; offs < bufsize; offs++)
+        		{
+        			buffer[offs] = notes.nextSample();
+        		}
+            	
+            	audio.write(buffer, 0, bufsize);
             }
             
             audio.stop();
