@@ -89,12 +89,14 @@ public class Player
     
     public void startPlayback()
     {
-    	notes = new NoteRunner[2];
+    	notes = new NoteRunner[3];
     	
     	notes[0] = new NoteRunner(sampleRate);
     	notes[0].set_songIdx(0);
     	notes[1] = new NoteRunner(sampleRate);
     	notes[1].set_songIdx(1);
+    	notes[2] = new NoteRunner(sampleRate);
+    	notes[2].set_songIdx(2);
     	
     	stopPlaying = false;
     	
