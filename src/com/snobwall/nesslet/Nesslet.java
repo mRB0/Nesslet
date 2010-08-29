@@ -1,4 +1,4 @@
-package com.snowball.nesslet;
+package com.snobwall.nesslet;
 
 import android.app.Activity;
 import android.os.Bundle;
