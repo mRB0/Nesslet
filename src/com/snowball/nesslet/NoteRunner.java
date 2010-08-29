@@ -17,7 +17,7 @@ public class NoteRunner
 		sqwave.set_frequency((int)(_notes[_noteOffs] / 2));
 		sqwave.set_dutyCycle(_duties[_noteOffs]);
 		
-		sqwave.set_amplitude((byte)80);
+		sqwave.set_amplitude((byte)60);
 	}
 	
 	protected SquareWaveGen sqwave;
