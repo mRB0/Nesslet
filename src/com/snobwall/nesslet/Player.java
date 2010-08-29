@@ -11,40 +11,59 @@ public class Player
 
     protected boolean stopPlaying = false;
 
-    protected NoteRunner notes;
+    protected NoteRunner notes[];
     protected Thread playThread;
     
     public class AudioPlayer implements Runnable
     {
     	public void playAudio()
         {
-            int minSize = AudioTrack.getMinBufferSize(sampleRate,
+    		int channels = notes.length;
+    		int i;
+    		
+    		int minSize = AudioTrack.getMinBufferSize(sampleRate,
                     AudioFormat.CHANNEL_CONFIGURATION_MONO,
                     AudioFormat.ENCODING_PCM_8BIT);
-            AudioTrack audio = new AudioTrack(
-                    AudioManager.STREAM_MUSIC, sampleRate,
-                    AudioFormat.CHANNEL_CONFIGURATION_MONO,
-                    AudioFormat.ENCODING_PCM_8BIT,
-                    minSize < minBufferSize ? minBufferSize : minSize,
-                    AudioTrack.MODE_STREAM);
-
-        	audio.play();
             
+    		AudioTrack audio[] = new AudioTrack[channels];
+    		
+    		for(i = 0; i < channels; i++)
+    		{
+	    		audio[i] = new AudioTrack(
+	                    AudioManager.STREAM_MUSIC, sampleRate,
+	                    AudioFormat.CHANNEL_CONFIGURATION_MONO,
+	                    AudioFormat.ENCODING_PCM_8BIT,
+	                    minSize < minBufferSize ? minBufferSize : minSize,
+	                    AudioTrack.MODE_STREAM);
+	         	
+	    		audio[i].play();
+    		}
+    		
             int bufsize = minSize < minBufferSize ? minBufferSize : minSize;
             
-            byte[] buffer = new byte[bufsize];
+            byte[][] buffer = new byte[channels][bufsize];
             
             while(!stopPlaying)
             {
-        		for(int offs = 0; offs < bufsize; offs++)
+        		for(i = 0; i < channels; i++)
         		{
-        			buffer[offs] = notes.nextSample();
+	            	for(int offs = 0; offs < bufsize; offs++)
+	        		{
+	        			buffer[i][offs] = notes[i].nextSample();
+	        		}
         		}
-            	
-            	audio.write(buffer, 0, bufsize);
+        		
+        		for(i = 0; i < channels; i++)
+        		{
+        			audio[i].write(buffer[i], 0, bufsize);
+        		}
+        		
             }
             
-            audio.stop();
+    		for(i = 0; i < channels; i++)
+    		{
+    			audio[i].stop();
+    		}
         }
         
         public void run()
@@ -70,7 +89,12 @@ public class Player
     
     public void startPlayback()
     {
-    	notes = new NoteRunner(sampleRate);
+    	notes = new NoteRunner[2];
+    	
+    	notes[0] = new NoteRunner(sampleRate);
+    	notes[0].set_songIdx(0);
+    	notes[1] = new NoteRunner(sampleRate);
+    	notes[1].set_songIdx(1);
     	
     	stopPlaying = false;
     	

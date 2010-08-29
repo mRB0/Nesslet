@@ -21,29 +21,6 @@ public class NoteRunner
 	
 	protected SquareWaveGen sqwave;
 	
-	protected class Note
-	{
-		// -1 for unset for all fields
-		public byte noteNum;
-		public byte vol; // 0 .. 127
-		public byte duty;
-		public byte vibrato;
-		
-		public Note(byte noteNum, byte vol, byte duty, byte vibrato) {
-			super();
-			this.noteNum = noteNum;
-			this.vol = vol;
-			this.duty = duty;
-			this.vibrato = vibrato;
-		}
-		
-	}
-	
-	static int frequencyOf(byte note)
-	{
-		return (int)(440.0 * Math.pow(Math.pow(2.0, (1.0/12.0)), (double)(note - 49)));
-	}
-
 	protected int _songIdx = 0;
 	protected int _playingIdx = _songIdx;
 	
@@ -83,22 +60,22 @@ public class NoteRunner
 				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
 			},
 			{
-				new Note((byte)49, (byte)64, (byte)50, (byte)0),
-				new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
-				new Note((byte)42, (byte)-1, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)16, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)32, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)48, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)64, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)80, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
-				new Note((byte)40, (byte)96, (byte)-1, (byte)-1),
-				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
-				new Note((byte)39, (byte)96, (byte)31, (byte)-1),
-				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
-				new Note((byte)35, (byte)96, (byte)10, (byte)-1),
-				new Note((byte)-1, (byte)12, (byte)-1, (byte)-1),
+				new Note((byte)28, (byte)64, (byte)50, (byte)0),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)0,  (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)28, (byte)64, (byte)-1, (byte)0),
+				new Note((byte)-1, (byte)0,  (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)-1, (byte)-1, (byte)-1),
+				new Note((byte)28, (byte)64, (byte)-1, (byte)0),
+				new Note((byte)-1, (byte)0, (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)64,  (byte)-1, (byte)-1),
+				new Note((byte)-1, (byte)0, (byte)-1, (byte)-1),
 			},
 	};
 	
@@ -125,7 +102,7 @@ public class NoteRunner
 			// new note; change things as appropriate
 			if (newNote.noteNum >= 0)
 			{
-				sqwave.set_frequency(frequencyOf(newNote.noteNum));
+				sqwave.set_frequency(Note.frequencyOf(newNote.noteNum));
 			}
 			if (newNote.vol >= 0)
 			{
