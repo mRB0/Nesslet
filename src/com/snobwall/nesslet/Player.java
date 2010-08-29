@@ -1,4 +1,4 @@
-package com.snowball.nesslet;
+package com.snobwall.nesslet;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
