@@ -60,6 +60,11 @@ public class SquareWaveGen
 		
 		_sampleIdx = (_sampleIdx + 1) % _samplePeriod;
 		
+		if (_amplitude == 0)
+		{
+			return -128;
+		}
+		
 		if (_sampleIdx < middle)
 		{
 			return (byte)(127 - _amplitude);
