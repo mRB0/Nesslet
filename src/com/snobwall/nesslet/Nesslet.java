@@ -1,6 +1,7 @@
 package com.snobwall.nesslet;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -40,12 +41,16 @@ public class Nesslet extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        
+        
         logTag = getString(R.string.log_name);
         
         System.err.println("onCreate.");
         i("d: onCreate in a log.");
         
         player = new Player();
+        
+    	player.startPlayback();
     }
     
     @Override
@@ -54,8 +59,6 @@ public class Nesslet extends Activity {
     	super.onResume();
         
         System.err.println("onResume.");
-        
-    	player.startPlayback();
     }
     
     @Override
@@ -64,8 +67,30 @@ public class Nesslet extends Activity {
     	super.onPause();
         
     	System.err.println("onPause.");
+    }
+    
+    @Override
+    public void onStart()
+    {
+    	super.onStart();
         
+    	System.err.println("onStart.");
+        player.startPlayback();
+    }
+    
+    @Override
+    public void onStop()
+    {
+    	super.onStop();
+        
+    	System.err.println("onStop.");
         player.stopPlayback();
     }
     
+    @Override
+    public void onConfigurationChanged(Configuration cfg)
+    {
+    	super.onConfigurationChanged(cfg);
+    	System.err.println("onConfigurationChanged.");
+    }
 }

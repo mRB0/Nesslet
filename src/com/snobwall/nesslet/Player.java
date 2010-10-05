@@ -24,6 +24,7 @@ public class Player
     		int minSize = AudioTrack.getMinBufferSize(sampleRate,
                     AudioFormat.CHANNEL_CONFIGURATION_MONO,
                     AudioFormat.ENCODING_PCM_8BIT);
+    		int bufsize = minSize < minBufferSize ? minBufferSize : minSize;
             
     		AudioTrack audio[] = new AudioTrack[channels];
     		
@@ -33,14 +34,12 @@ public class Player
 	                    AudioManager.STREAM_MUSIC, sampleRate,
 	                    AudioFormat.CHANNEL_CONFIGURATION_MONO,
 	                    AudioFormat.ENCODING_PCM_8BIT,
-	                    minSize < minBufferSize ? minBufferSize : minSize,
+	                    bufsize,
 	                    AudioTrack.MODE_STREAM);
 	         	
 	    		audio[i].play();
     		}
     		
-            int bufsize = minSize < minBufferSize ? minBufferSize : minSize;
-            
             byte[][] buffer = new byte[channels][bufsize];
             
             while(!stopPlaying)
