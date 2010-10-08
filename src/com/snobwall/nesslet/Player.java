@@ -1,5 +1,8 @@
 package com.snobwall.nesslet;
 
+import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
+
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -28,6 +31,7 @@ public class Player
             
     		AudioTrack audio[] = new AudioTrack[channels];
     		
+    		ShortBuffer[] buffer = new ShortBuffer[channels];
     		for(i = 0; i < channels; i++)
     		{
 	    		audio[i] = new AudioTrack(
@@ -39,27 +43,34 @@ public class Player
 	         	
 	    		audio[i].setStereoVolume(1.0f, 1.0f);
 	    		audio[i].play();
+	    		
+	    		ByteBuffer bb = ByteBuffer.allocateDirect(bufsize);
+	    		buffer[i] = bb.asShortBuffer();
     		}
     		
-    		short[][] buffer = new short[channels][bufsize / 2]; // this is num SAMPLES: divide by 2 for 16-bit
+    		//[bufsize / 2]; // this is num SAMPLES: divide by 2 for 16-bit
     		
-    		System.err.println("Buffer length is " + buffer[0].length);
+    		System.err.println("Buffer length is " + buffer[0].capacity());
+    		System.err.println("Buffer is direct?? " + buffer[0].isDirect());
+    		
+    		short[] buf = new short[bufsize / 2];
     		
             while(!stopPlaying)
             {
         		for(i = 0; i < channels; i++)
         		{
-	            	for(int offs = 0; offs < buffer[i].length; offs+=2)
+        			buffer[i].rewind();
+	            	while(buffer[i].hasRemaining())
 	        		{
-	            		int sample = notes[i].nextSample();
-	            		buffer[i][offs] = (short)(sample >> 16);
-	            		buffer[i][offs+1] = (short)(sample);
+	            		notes[i].nextSample(buffer[i]);
 	        		}
         		}
         		
         		for(i = 0; i < channels; i++)
         		{
-        			audio[i].write(buffer[i], 0, buffer[i].length);
+        			buffer[i].rewind();
+        			buffer[i].get(buf);
+        			audio[i].write(buf, 0, buf.length);
         		}
         		
             }

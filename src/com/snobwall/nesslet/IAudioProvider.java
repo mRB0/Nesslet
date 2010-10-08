@@ -1,5 +1,7 @@
 package com.snobwall.nesslet;
 
+import java.nio.ShortBuffer;
+
 public interface IAudioProvider {
-	public int nextSample();
+	public void nextSample(ShortBuffer sampleBuf);
 }
