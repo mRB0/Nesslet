@@ -1,8 +1,5 @@
 package com.snobwall.nesslet;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
-
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -21,64 +18,37 @@ public class Player
     {
     	public void playAudio()
         {
-    		int channels = notes.length;
-    		int i;
-    		
     		int minSize = AudioTrack.getMinBufferSize(sampleRate,
                     AudioFormat.CHANNEL_CONFIGURATION_STEREO,
                     AudioFormat.ENCODING_PCM_16BIT);
     		int bufsize = minSize < minBufferSize ? minBufferSize : minSize;
             
-    		AudioTrack audio[] = new AudioTrack[channels];
+    		AudioTrack audio = new AudioTrack(
+                    AudioManager.STREAM_MUSIC, sampleRate,
+                    AudioFormat.CHANNEL_CONFIGURATION_STEREO,
+                    AudioFormat.ENCODING_PCM_16BIT,
+                    bufsize,
+                    AudioTrack.MODE_STREAM);
+    		audio.setStereoVolume(1.0f, 1.0f);
+    		audio.play();
     		
-    		ShortBuffer[] buffer = new ShortBuffer[channels];
-    		for(i = 0; i < channels; i++)
-    		{
-	    		audio[i] = new AudioTrack(
-	                    AudioManager.STREAM_MUSIC, sampleRate,
-	                    AudioFormat.CHANNEL_CONFIGURATION_STEREO,
-	                    AudioFormat.ENCODING_PCM_16BIT,
-	                    bufsize,
-	                    AudioTrack.MODE_STREAM);
-	         	
-	    		audio[i].setStereoVolume(1.0f, 1.0f);
-	    		audio[i].play();
-	    		
-	    		ByteBuffer bb = ByteBuffer.allocateDirect(bufsize);
-	    		buffer[i] = bb.asShortBuffer();
-    		}
+    		Mixer audioSource;
+    		audioSource = new Mixer(notes);
     		
-    		//[bufsize / 2]; // this is num SAMPLES: divide by 2 for 16-bit
-    		
-    		System.err.println("Buffer length is " + buffer[0].capacity());
-    		System.err.println("Buffer is direct?? " + buffer[0].isDirect());
-    		
-    		short[] buf = new short[bufsize / 2];
+    		short[] buffer = new short[bufsize / 2]; // this is num SAMPLES: divide by 2 for 16-bit
     		
             while(!stopPlaying)
             {
-        		for(i = 0; i < channels; i++)
+            	for(int offs = 0; offs < buffer.length; offs += 2)
         		{
-        			buffer[i].rewind();
-	            	while(buffer[i].hasRemaining())
-	        		{
-	            		notes[i].nextSample(buffer[i]);
-	        		}
+            		audioSource.nextSample(buffer, offs);
         		}
         		
-        		for(i = 0; i < channels; i++)
-        		{
-        			buffer[i].rewind();
-        			buffer[i].get(buf);
-        			audio[i].write(buf, 0, buf.length);
-        		}
+    			audio.write(buffer, 0, buffer.length);
         		
             }
             
-    		for(i = 0; i < channels; i++)
-    		{
-    			audio[i].stop();
-    		}
+			audio.stop();
         }
         
         public void run()
