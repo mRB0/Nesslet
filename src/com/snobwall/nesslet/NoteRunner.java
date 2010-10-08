@@ -1,6 +1,5 @@
 package com.snobwall.nesslet;
 
-import java.nio.ShortBuffer;
 
 public class NoteRunner implements IAudioProvider
 {
@@ -153,7 +152,7 @@ public class NoteRunner implements IAudioProvider
 	protected int _state_noteOffs = 0; // which note are we playing?
 
 	@Override
-	public void nextSample(ShortBuffer sampleBuf)
+	public void nextSample(short[] sampleBuf, int offs)
 	{
 		if (_state_tickOffs == 0 && 
 				_state_frameOffs == 0) 
@@ -181,7 +180,7 @@ public class NoteRunner implements IAudioProvider
 			}
 		}
 		
-		sqwave.nextSample(sampleBuf);
+		sqwave.nextSample(sampleBuf, offs);
 		
 		// prepare for next frame
 		_state_frameOffs = (_state_frameOffs + 1) % _tickLen;

@@ -1,6 +1,5 @@
 package com.snobwall.nesslet;
 
-import java.nio.ShortBuffer;
 
 public class SquareWaveGen implements IAudioProvider
 {
@@ -57,7 +56,7 @@ public class SquareWaveGen implements IAudioProvider
     protected int _sampleIdx = 0;
     
 	@Override
-	public void nextSample(ShortBuffer sampleBuf)
+	public void nextSample(short[] sampleBuf, int offs)
 	{
 		int middle = _samplePeriod * _dutyCycle / 100;
 		
@@ -66,8 +65,7 @@ public class SquareWaveGen implements IAudioProvider
 		
 		if (_amplitude == 0)
 		{
-			sampleBuf.put((short)0);
-			sampleBuf.put((short)0);
+			sampleBuf[offs] = sampleBuf[offs+1] = 0;
 		}
 		
 		if (_sampleIdx < middle)
@@ -79,8 +77,7 @@ public class SquareWaveGen implements IAudioProvider
 			sample = (short)(-(_amplitude << 8));
 		}
 		
-		sampleBuf.put(sample);
-		sampleBuf.put(sample);
+		sampleBuf[offs] = sampleBuf[offs+1] = sample;
     }
     
 }
