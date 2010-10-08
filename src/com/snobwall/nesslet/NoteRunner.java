@@ -1,6 +1,6 @@
 package com.snobwall.nesslet;
 
-public class NoteRunner
+public class NoteRunner implements IAudioProvider
 {
 	protected int _frequency;
 	
@@ -150,9 +150,10 @@ public class NoteRunner
 	protected int _state_tickOffs = 0; // which tick are we on?
 	protected int _state_noteOffs = 0; // which note are we playing?
 
-	protected byte nextSample()
+	@Override
+	public int nextSample()
 	{
-		byte sample;
+		int sample;
 		
 		if (_state_tickOffs == 0 && 
 				_state_frameOffs == 0) 

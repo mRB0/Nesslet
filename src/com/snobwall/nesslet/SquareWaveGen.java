@@ -1,6 +1,6 @@
 package com.snobwall.nesslet;
 
-public class SquareWaveGen
+public class SquareWaveGen implements IAudioProvider
 {
 	protected boolean _on;
 	
@@ -54,25 +54,29 @@ public class SquareWaveGen
 	protected int _samplePeriod; // Period of sample (dependent on _sampleRate)
     protected int _sampleIdx = 0;
     
-	public byte nextSample()
+	@Override
+	public int nextSample()
 	{
 		int middle = _samplePeriod * _dutyCycle / 100;
 		
 		_sampleIdx = (_sampleIdx + 1) % _samplePeriod;
+		short sample;
 		
 		if (_amplitude == 0)
 		{
-			return -128;
+			return 0;
 		}
 		
 		if (_sampleIdx < middle)
 		{
-			return (byte)(127 - _amplitude);
+			sample = (short)(_amplitude << 8);
 		}
 		else
 		{
-			return (byte)(-128 + _amplitude);
-		}	
+			sample = (short)(-(_amplitude << 8));
+		}
+		
+		return (sample << 16) | sample;
     }
     
 }

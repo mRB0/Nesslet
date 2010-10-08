@@ -41,16 +41,12 @@ public class Nesslet extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        
-        
         logTag = getString(R.string.log_name);
         
         System.err.println("onCreate.");
         i("d: onCreate in a log.");
         
-        player = new Player();
-        
-    	player.startPlayback();
+    	//player.startPlayback();
     }
     
     @Override
@@ -75,6 +71,8 @@ public class Nesslet extends Activity {
     	super.onStart();
         
     	System.err.println("onStart.");
+    	
+        player = new Player();
         player.startPlayback();
     }
     
