@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, Nesslet!</string>
+    <string name="test">This is a test string.</string>
     <string name="app_name">Nesslet</string>
 <string name="log_name">Nesslet</string>
+<string name="Next">Go to next screen</string>
+<string name="StartStop">Start / Stop</string>
 </resources>
