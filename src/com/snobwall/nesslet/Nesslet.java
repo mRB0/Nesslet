@@ -1,15 +1,22 @@
 package com.snobwall.nesslet;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 
-public class Nesslet extends Activity {
+public class Nesslet extends Activity implements OnClickListener {
+	
     protected Player player;
 	
     protected String logTag;
+    
+    protected boolean playing = false;
     
     protected void d(String message)
     {
@@ -46,6 +53,12 @@ public class Nesslet extends Activity {
         System.err.println("onCreate.");
         i("d: onCreate in a log.");
         
+        Button button = (Button)findViewById(R.id.Button01);
+        button.setOnClickListener(this);
+        
+        button = (Button)findViewById(R.id.Button02);
+        button.setOnClickListener(this);
+        
     	//player.startPlayback();
     }
     
@@ -72,8 +85,6 @@ public class Nesslet extends Activity {
         
     	System.err.println("onStart.");
     	
-        player = new Player();
-        player.startPlayback();
     }
     
     @Override
@@ -82,7 +93,12 @@ public class Nesslet extends Activity {
     	super.onStop();
         
     	System.err.println("onStop.");
-        player.stopPlayback();
+    	
+    	if (playing)
+    	{
+            player.stopPlayback();
+            playing = false;
+    	}
     }
     
     @Override
@@ -90,5 +106,36 @@ public class Nesslet extends Activity {
     {
     	super.onConfigurationChanged(cfg);
     	System.err.println("onConfigurationChanged.");
+    }
+    
+    @Override
+    public void onClick(View v)
+    {
+    	switch(v.getId())
+    	{
+    	case R.id.Button01:
+	        Intent testIntent = new Intent();
+	        testIntent.setClassName("com.snobwall.nesslet", "com.snobwall.nesslet.TestEditor");
+	        this.startActivity(testIntent);
+    		break;
+    	
+    	case R.id.Button02:
+    		startStop();
+    		break;
+    	}
+    }
+    
+    public void startStop()
+    {
+    	if (playing)
+    	{
+            player.stopPlayback();
+    	}
+    	else
+    	{
+            player = new Player();
+            player.startPlayback();
+    	}
+    	playing = !playing;
     }
 }

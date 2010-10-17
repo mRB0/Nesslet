@@ -20,7 +20,33 @@ public class Note
 	{
 		return (int)(440.0 * Math.pow(Math.pow(2.0, (1.0/12.0)), (double)(note - 49)));
 	}
-
+	
+	static String[] note_names = {
+		"C",
+		"C#",
+		"D",
+		"D#",
+		"E",
+		"F",
+		"F#",
+		"G",
+		"G#",
+		"A",
+		"A#",
+		"B"
+	};
+	
+	static String nameOf(byte note)
+	{
+		note += 8;
+		
+		StringBuilder sb = new StringBuilder();
+		java.util.Formatter fb = new java.util.Formatter(sb);
+		
+		fb.format("%-2s%d", note_names[note % 12], note / 12);
+		
+		return sb.toString().replace(' ', '-');
+	}
 
 }
 

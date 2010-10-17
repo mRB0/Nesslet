@@ -9,4 +9,6 @@
     android:layout_height="wrap_content" 
     android:text="@string/hello"
     />
+<Button android:id="@+id/Button01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/Next"></Button>
+<Button android:id="@+id/Button02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/StartStop"></Button>
 </LinearLayout>
