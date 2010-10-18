@@ -1,5 +1,6 @@
 package com.snobwall.nesslet;
 
+import android.util.Log;
 
 public class SquareWaveGen implements IAudioProvider
 {
@@ -10,6 +11,8 @@ public class SquareWaveGen implements IAudioProvider
 	protected int _dutyCycle = 50; // 0..100
 	protected byte _amplitude = 127; // 0..127 
 	protected int _sampleRate;
+	
+	protected final String logTag = "Nesslet.SquareWaveGen";
 	
 	public int get_dutyCycle() {
 		return _dutyCycle;
@@ -26,7 +29,7 @@ public class SquareWaveGen implements IAudioProvider
 	public void set_frequency(int frequency) {
 		_frequency = frequency;
 		
-		_samplePeriod = _sampleRate / _frequency;
+		_samplePeriod = (float)_sampleRate / (float)_frequency;
 	}
 
 	public byte get_amplitude() {
@@ -52,15 +55,17 @@ public class SquareWaveGen implements IAudioProvider
 		
 	}
 	
-	protected int _samplePeriod; // Period of sample (dependent on _sampleRate)
-    protected int _sampleIdx = 0;
+	protected float _samplePeriod; // Period of sample (dependent on _sampleRate)
+    protected float _sampleOffs = 0;
     
 	@Override
 	public void nextSample(short[] sampleBuf, int offs)
 	{
-		int middle = _samplePeriod * _dutyCycle / 100;
+		int middle = (int)_samplePeriod * _dutyCycle / 100;
 		
-		_sampleIdx = (_sampleIdx + 1) % _samplePeriod;
+		_sampleOffs = (_sampleOffs + 1) % _samplePeriod;
+		int sampleIdx = (int)_sampleOffs;
+		
 		short sample;
 		
 		if (_amplitude == 0)
@@ -68,7 +73,7 @@ public class SquareWaveGen implements IAudioProvider
 			sampleBuf[offs] = sampleBuf[offs+1] = 0;
 		}
 		
-		if (_sampleIdx < middle)
+		if (sampleIdx < middle)
 		{
 			sample = (short)(_amplitude << 8);
 		}
