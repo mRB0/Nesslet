@@ -18,7 +18,6 @@ public class Nesslet extends Activity implements OnClickListener {
 	
     protected String logTag;
     
-    protected boolean playing = false;
     protected SvcAudioPlayer _player = null;
     
 	/** Called when the activity is first created. */
@@ -76,11 +75,10 @@ public class Nesslet extends Activity implements OnClickListener {
         
     	System.err.println("onStop.");
     	
-    	if (playing)
-    	{
-            _player.stopPlayback();
-            playing = false;
-    	}
+//    	if (_player.isPlaying())
+//    	{
+//            _player.stopPlayback();
+//    	}
     }
     
     @Override
@@ -107,7 +105,7 @@ public class Nesslet extends Activity implements OnClickListener {
     
     public void startStop()
     {
-    	if (playing)
+    	if (_player.isPlaying())
     	{
             _player.stopPlayback();
     	}
@@ -115,8 +113,6 @@ public class Nesslet extends Activity implements OnClickListener {
     	{
             _player.startPlayback();
     	}
-    	playing = !playing;
-    	
     	System.err.println("The service's number is " + _player.getANumber());
 
     }
