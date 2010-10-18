@@ -1,9 +1,13 @@
 package com.snobwall.nesslet;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,35 +16,10 @@ import android.widget.Button;
 
 public class Nesslet extends Activity implements OnClickListener {
 	
-    protected Player player;
-	
     protected String logTag;
     
     protected boolean playing = false;
-    
-    protected void d(String message)
-    {
-        if (Log.isLoggable(logTag, Log.DEBUG))
-        {
-        	Log.d(logTag, message);
-        }
-    }
-    
-    protected void i(String message)
-    {
-        if (Log.isLoggable(logTag, Log.INFO))
-        {
-        	Log.i(logTag, message);
-        }
-    }
-    
-    protected void w(String message)
-    {
-        if (Log.isLoggable(logTag, Log.WARN))
-        {
-        	Log.w(logTag, message);
-        }
-    }
+    protected SvcAudioPlayer _player = null;
     
 	/** Called when the activity is first created. */
     @Override
@@ -51,7 +30,7 @@ public class Nesslet extends Activity implements OnClickListener {
         logTag = getString(R.string.log_name);
         
         System.err.println("onCreate.");
-        i("d: onCreate in a log.");
+        Log.i(logTag, "d: onCreate in a log.");
         
         Button button = (Button)findViewById(R.id.Button01);
         button.setOnClickListener(this);
@@ -84,7 +63,10 @@ public class Nesslet extends Activity implements OnClickListener {
     	super.onStart();
         
     	System.err.println("onStart.");
-    	
+
+    	System.err.println("bindService = " + bindService(new Intent(this, SvcAudioPlayer.class),
+    			_svcConnection, Context.BIND_AUTO_CREATE));
+
     }
     
     @Override
@@ -96,7 +78,7 @@ public class Nesslet extends Activity implements OnClickListener {
     	
     	if (playing)
     	{
-            player.stopPlayback();
+            _player.stopPlayback();
             playing = false;
     	}
     }
@@ -114,9 +96,7 @@ public class Nesslet extends Activity implements OnClickListener {
     	switch(v.getId())
     	{
     	case R.id.Button01:
-	        Intent testIntent = new Intent();
-	        testIntent.setClassName("com.snobwall.nesslet", "com.snobwall.nesslet.TestEditor");
-	        this.startActivity(testIntent);
+    		startActivity(new Intent(Nesslet.this, TestEditor.class));
     		break;
     	
     	case R.id.Button02:
@@ -129,13 +109,28 @@ public class Nesslet extends Activity implements OnClickListener {
     {
     	if (playing)
     	{
-            player.stopPlayback();
+            _player.stopPlayback();
     	}
     	else
     	{
-            player = new Player();
-            player.startPlayback();
+            _player.startPlayback();
     	}
     	playing = !playing;
+    	
+    	System.err.println("The service's number is " + _player.getANumber());
+
     }
+    
+    
+    private ServiceConnection _svcConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            _player = ((SvcAudioPlayer.LocalBinder)service).getService();
+            
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            _player = null;
+        }
+    };
+
 }

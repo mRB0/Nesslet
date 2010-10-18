@@ -9,8 +9,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class EditorView extends View {
-	
+public class EditorView extends View
+{
 	protected Paint _paintObj;
 	protected float _fingerSpacing;
 	
@@ -26,13 +26,19 @@ public class EditorView extends View {
 	public EditorView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		
 		System.err.println("EditorView is being added with attributes!");
 		
 		_paintObj = new Paint(Paint.ANTI_ALIAS_FLAG);
 		_paintObj.setTypeface(Typeface.MONOSPACE);
-		_paintObj.setTextSize(16);
+		_paintObj.setTextSize(20);
 		_paintObj.setTextAlign(Paint.Align.CENTER);
 		_paintObj.setColor(Color.BLACK);
+		
+		if (isInEditMode())
+		{
+			return;
+		}
 		
 		System.err.println("Font spacing is " + _paintObj.getFontSpacing());
 		
@@ -67,14 +73,14 @@ public class EditorView extends View {
 		return true;
 	}
 	
-//	@Override
-//	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-//	{
-//		System.err.println("Measured width is " + MeasureSpec.getSize(widthMeasureSpec));
-//		
-//		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), 
-//				MeasureSpec.getSize(heightMeasureSpec));
-//	}
+	@Override
+	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+	{
+		System.err.println("Measured width is " + MeasureSpec.getSize(widthMeasureSpec));
+		
+		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), 
+				MeasureSpec.getSize(heightMeasureSpec));
+	}
 	
 	protected byte _note = 56;
 	
@@ -91,4 +97,5 @@ public class EditorView extends View {
 		canvas.drawText(Note.nameOf(_note), this.getWidth()/2.0f, this.getHeight()/2.0f, _paintObj);
 		
 	}
+
 }
