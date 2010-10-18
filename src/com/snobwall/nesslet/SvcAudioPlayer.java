@@ -46,6 +46,8 @@ public class SvcAudioPlayer extends Service {
     public void onDestroy()
     {
     	System.err.println("SvcAudioPlayer onDestroy");
+    	
+    	stopPlayback();
     }
     
     //
@@ -54,7 +56,11 @@ public class SvcAudioPlayer extends Service {
     
     protected Player player = null;
 	
-    public void stopPlayback()
+    public boolean isPlaying() {
+		return (player != null);
+	}
+
+	public void stopPlayback()
     {
     	if (player != null)
     	{

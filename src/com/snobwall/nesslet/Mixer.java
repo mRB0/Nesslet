@@ -4,7 +4,7 @@ public class Mixer implements IAudioProvider
 {
 	
 	private IAudioProvider[] _audioSources;
-	private int _mixVol = 48;
+	private int _mixVol = 32;
 	
 	private short[] _mixTmp = new short[2];
 	
