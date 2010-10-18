@@ -18,7 +18,7 @@ public class Note
 	
 	static int frequencyOf(byte note)
 	{
-		return (int)(440.0 * Math.pow(Math.pow(2.0, (1.0/12.0)), (double)(note - 49)));
+		return (int)(440.0 * Math.pow(Math.pow(2.0, (1.0/12.0)), (double)(note - 57)));
 	}
 	
 	static String[] note_names = {
@@ -38,8 +38,6 @@ public class Note
 	
 	static String nameOf(byte note)
 	{
-		note += 8;
-		
 		StringBuilder sb = new StringBuilder();
 		java.util.Formatter fb = new java.util.Formatter(sb);
 		
