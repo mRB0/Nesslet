@@ -30,14 +30,23 @@ public class Player
                     bufsize,
                     AudioTrack.MODE_STREAM);
     		audio.setStereoVolume(1.0f, 1.0f);
-    		audio.play();
     		
     		Mixer audioSource;
     		audioSource = new Mixer(notes);
     		
     		short[] buffer = new short[bufsize / 2]; // this is num SAMPLES: divide by 2 for 16-bit
     		
-            while(!stopPlaying)
+    		// pre-fill buffer before starting playback
+        	for(int offs = 0; offs < buffer.length; offs += 2)
+    		{
+        		audioSource.nextSample(buffer, offs);
+    		}
+    		
+			audio.write(buffer, 0, buffer.length);
+    		audio.play();
+
+            // fill buffer repeatedly
+    		while(!stopPlaying)
             {
             	for(int offs = 0; offs < buffer.length; offs += 2)
         		{
