@@ -1,5 +1,14 @@
 package com.snobwall.nesslet;
 
+//
+// mad's wavetable suggestion looks something like:
+// for(each_output_sample)
+// { 
+//    buffer[n] = volume * waveform[(unsigned int)(pointer) >> 20];
+//    pointer += frequency;
+// }
+// 
+
 import android.util.Log;
 
 public class SquareWaveGen implements IAudioProvider
@@ -20,6 +29,7 @@ public class SquareWaveGen implements IAudioProvider
 
 	public void set_dutyCycle(int dutyCycle) {
 		_dutyCycle = dutyCycle;
+		_middle = (int)_samplePeriod * _dutyCycle / 100;
 	}
 
 	public int get_frequency() {
@@ -30,6 +40,8 @@ public class SquareWaveGen implements IAudioProvider
 		_frequency = frequency;
 		
 		_samplePeriod = (float)_sampleRate / (float)_frequency;
+		
+		_middle = (int)_samplePeriod * _dutyCycle / 100;
 	}
 
 	public byte get_amplitude() {
@@ -56,14 +68,18 @@ public class SquareWaveGen implements IAudioProvider
 	}
 	
 	protected float _samplePeriod; // Period of sample (dependent on _sampleRate)
+	protected int _middle;
     protected float _sampleOffs = 0;
     
 	@Override
 	public void nextSample(short[] sampleBuf, int offs)
 	{
-		int middle = (int)_samplePeriod * _dutyCycle / 100;
+		_sampleOffs++;
+		if (_sampleOffs > _samplePeriod)
+		{
+			_sampleOffs -= _samplePeriod;
+		}
 		
-		_sampleOffs = (_sampleOffs + 1) % _samplePeriod;
 		int sampleIdx = (int)_sampleOffs;
 		
 		short sample;
@@ -73,7 +89,7 @@ public class SquareWaveGen implements IAudioProvider
 			sampleBuf[offs] = sampleBuf[offs+1] = 0;
 		}
 		
-		if (sampleIdx < middle)
+		if (sampleIdx < _middle)
 		{
 			sample = (short)(_amplitude << 8);
 		}
