@@ -40,7 +40,7 @@ public class NoteRunner implements IAudioProvider
 		}
 	}
 
-	protected Note _notes[][] =
+	public static Note _notes[][] =
 	{
 			{
 			    new Note((byte)52, (byte)64, (byte)25, (byte)-1),

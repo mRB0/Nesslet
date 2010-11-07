@@ -38,6 +38,10 @@ public class Note
 	
 	static String nameOf(byte note)
 	{
+		if (note == -1)
+		{
+			return "...";
+		}
 		StringBuilder sb = new StringBuilder();
 		java.util.Formatter fb = new java.util.Formatter(sb);
 		
