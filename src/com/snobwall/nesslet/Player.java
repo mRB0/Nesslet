@@ -6,7 +6,7 @@ import android.media.AudioTrack;
 
 public class Player
 {
-	private int minBufferSize = 16384;
+	private int minBufferSize = 65536;
 	private int sampleRate = 44100;
 
     protected boolean stopPlaying = false;
