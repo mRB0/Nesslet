@@ -45,7 +45,14 @@ public class Note
 		StringBuilder sb = new StringBuilder();
 		java.util.Formatter fb = new java.util.Formatter(sb);
 		
-		fb.format("%-2s%d", note_names[note % 12], note / 12);
+		try
+		{
+			fb.format("%-2s%d", note_names[note % 12], note / 12);
+		}
+		catch(IndexOutOfBoundsException ioobe)
+		{
+			fb.format("???");
+		}
 		
 		return sb.toString().replace(' ', '-');
 	}
