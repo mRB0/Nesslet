@@ -5,6 +5,16 @@
 <TextView android:id="@+id/TextView01" android:text="@string/test" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
 
 
-<com.snobwall.nesslet.EditorView android:id="@+id/View01" android:layout_width="wrap_content" android:layout_height="wrap_content"></com.snobwall.nesslet.EditorView>
+<ScrollView android:id="@+id/ScrollView01" android:layout_height="fill_parent" android:layout_width="fill_parent">
+	<HorizontalScrollView android:id="@+id/HorizontalScrollView01" android:layout_height="wrap_content" android:layout_width="wrap_content">
+		<LinearLayout android:id="@+id/ChannelLayout" android:layout_height="wrap_content" android:layout_width="wrap_content">
+			<com.snobwall.nesslet.EditorView android:id="@+id/EditorViewCh1" android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+			<com.snobwall.nesslet.EditorView android:layout_marginLeft="24dp" android:id="@+id/EditorViewCh2" android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+			<com.snobwall.nesslet.EditorView android:layout_marginLeft="24dp" android:id="@+id/EditorViewCh3" android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+			<com.snobwall.nesslet.EditorView android:layout_marginLeft="24dp" android:id="@+id/EditorViewCh4" android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+		</LinearLayout>
+	</HorizontalScrollView>
+</ScrollView>
+
 
 </LinearLayout>

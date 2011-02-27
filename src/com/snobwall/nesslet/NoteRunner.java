@@ -39,7 +39,27 @@ public class NoteRunner implements IAudioProvider
 			_songIdx = songIdx;
 		}
 	}
-
+	
+	public static Note _testPattern[] = {
+	    new Note((byte)52, (byte)64, (byte)25, (byte)-1),
+	    new Note((byte)54, (byte)56, (byte)-1, (byte)-1),
+	    new Note((byte)56, (byte)48, (byte)-1, (byte)-1),
+	    new Note((byte)58, (byte)-1, (byte)-1, (byte)-1),
+	    new Note((byte)52, (byte)64, (byte)25, (byte)-1),
+	    new Note((byte)54, (byte)56, (byte)-1, (byte)-1),
+	    new Note((byte)56, (byte)48, (byte)-1, (byte)-1),
+	    new Note((byte)58, (byte)-1, (byte)-1, (byte)-1),
+	    new Note((byte)52, (byte)64, (byte)25, (byte)-1),
+	    new Note((byte)54, (byte)56, (byte)-1, (byte)-1),
+	    new Note((byte)56, (byte)48, (byte)-1, (byte)-1),
+	    new Note((byte)58, (byte)-1, (byte)-1, (byte)-1),
+	    new Note((byte)52, (byte)64, (byte)25, (byte)-1),
+	    new Note((byte)54, (byte)56, (byte)-1, (byte)-1),
+	    new Note((byte)56, (byte)48, (byte)-1, (byte)-1),
+	    new Note((byte)58, (byte)-1, (byte)-1, (byte)-1),
+	    new Note((byte)68, (byte)-1, (byte)-1, (byte)-1),
+	};
+	
 	public static Note _notes[][] =
 	{
 			{
